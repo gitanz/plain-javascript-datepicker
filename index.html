@@ -11,30 +11,66 @@
 		(function(){
 				var datepicker = document.getElementById("datepicker");
 				var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+				var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+				
 				var dpMethods = {
 					init: function(){
 						this.buildBody();
 					},
-					buildBody: function(){
-						var prevMonth = document.createElement("div"); 
-						var table = document.createElement("table");
-						var thead = document.createElement("thead");
+
+					getCurrentMonth: function(){
+						var date = new Date();
+						return months[date.getMonth()];
+					},
+
+					getStartDay:function(date){
+						date.setDate(1);
+						return date.getDay();
+					},
+
+					buildMonthSelector:function(){
+						var monthSelector = document.createElement("tr");
+						var prevMonth = document.createElement("td");
+						prevMonth.setAttribute("class","prevMonth");
+						prevMonth.appendChild(document.createTextNode("«"));
+						
+						var currentMonth = document.createElement("td");
+						currentMonth.setAttribute("class","currentMonth");
+						currentMonth.setAttribute("colspan","5");
+						currentMonth.appendChild(document.createTextNode(this.getCurrentMonth()));
+
+						var nextMonth = document.createElement("td");
+						nextMonth.setAttribute("class","nextMonth");
+						nextMonth.appendChild(document.createTextNode("»"));
+						
+						monthSelector.appendChild(prevMonth);
+						monthSelector.appendChild(currentMonth);
+						monthSelector.appendChild(nextMonth);
+						return monthSelector;
+					},
+
+					assignDays:function(){
 						var th = document.createElement("tr");
 						th.setAttribute("class","day");
-						//days
 						for(let i =0; i<7; i++){
 							tdDay = document.createElement("td")
 							tdDay.setAttribute("class", days[i])
 							tdDay.appendChild(document.createTextNode(days[i].slice(0,2)));
 							th.appendChild(tdDay);
 						}
-						thead.appendChild(th);
-						//dates
-						var tbody = document.createElement("tbody");
+						return th;
+					},
+					getStartDate:function(thisStartDate){
+						let startDay = this.getStartDay(thisStartDate);
+						thisStartDate.setDate(thisStartDate.getDate()-startDay);
+					},
+					assignDates:function(tbody){
+						let year = 2018;
+						let thisStartDate = new Date(year,5);
+						this.getStartDate(thisStartDate);
 						for(let i=0; i<5; i++){
 							var tr = document.createElement("tr");
 							for(let i =0; i<7; i++){
-								//start with last da
 								var td_date = document.createElement("td");
 								td_date.setAttribute("class", "date");
 								var span = document.createElement("span");
@@ -44,8 +80,15 @@
 							}
 							tbody.appendChild(tr);
 						}
+					},
+
+					buildBody: function(){
+						var table = document.createElement("table");
+						var tbody = document.createElement("tbody");
+						tbody.appendChild(this.buildMonthSelector());
+						tbody.appendChild(this.assignDays());
+						this.assignDates(tbody);
 						datepicker.appendChild(table);
-						table.appendChild(thead);
 						table.appendChild(tbody);
 					}
 				}
