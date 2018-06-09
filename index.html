@@ -2,6 +2,34 @@
 <html>
 <head>
 	<title>Datepicker plugin in plain javascript</title>
+	<style>
+		body{
+			background:#ececec;
+		}
+
+		#datepicker{
+			font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+		}
+		#datepicker table{
+			background: #FFF;
+			border: 1px solid #ececec;
+			border-radius: 2px;
+		}
+		#datepicker table tr td{
+			width:30px;
+			height:30px;
+			cursor: pointer;
+			text-align: center
+		}
+
+		#datepicker table tr td:hover{
+			background:#ececec;
+			cursor: pointer;
+			border-radius:5px
+		}
+
+		
+	</style>
 </head>
 <body>
 <div id="datepicker">
@@ -18,16 +46,17 @@
 						currentDate = new Date()
 						var table = document.createElement("table");
 						this.buildCalendar(table,new Date());
-						this.addEventListners(table)
-						
 					},
 
 					addEventListners: function(table){
 						prevMonth = document.querySelector(".prevMonth");
 						prevMonth.addEventListener("click", function(e){
-							this.buildCalendar(table, new Date(this.getAttribute("data-year"),this.getAttribute("data-month")))
+							dpMethods.buildCalendar(table, new Date(this.getAttribute("data-year"),this.getAttribute("data-month")))
 						})
 						nextMonth = document.querySelector(".nextMonth");
+						nextMonth.addEventListener("click", function(e){
+							dpMethods.buildCalendar(table, new Date(this.getAttribute("data-year"),this.getAttribute("data-month")))
+						})
 					},
 
 					getCurrentMonth: function(date){
@@ -53,6 +82,7 @@
 						var currentMonth = document.createElement("td");
 						currentMonth.setAttribute("class","currentMonth");
 						currentMonth.setAttribute("colspan","5");
+						currentMonth.style.textAlign = "center";
 						currentMonth.appendChild(document.createTextNode(this.getCurrentMonth(date)));
 
 						var nextMonth = document.createElement("td");
@@ -108,13 +138,14 @@
 					},
 
 					buildCalendar: function(table, date){
-						table.innerHtml = "";
+						table.innerText = "";
 						var tbody = document.createElement("tbody");
 						tbody.appendChild(this.buildMonthSelector(date));
 						tbody.appendChild(this.assignDays());
 						this.assignDates(tbody, date);
 						datepicker.appendChild(table);
 						table.appendChild(tbody);
+						this.addEventListners(table)
 					}
 				}
 
