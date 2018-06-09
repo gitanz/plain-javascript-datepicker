@@ -15,11 +15,22 @@
 				
 				var dpMethods = {
 					init: function(){
-						this.buildBody();
+						currentDate = new Date()
+						var table = document.createElement("table");
+						this.buildCalendar(table,new Date());
+						this.addEventListners(table)
+						
 					},
 
-					getCurrentMonth: function(){
-						var date = new Date();
+					addEventListners: function(table){
+						prevMonth = document.querySelector(".prevMonth");
+						prevMonth.addEventListener("click", function(e){
+							this.buildCalendar(table, new Date(this.getAttribute("data-year"),this.getAttribute("data-month")))
+						})
+						nextMonth = document.querySelector(".nextMonth");
+					},
+
+					getCurrentMonth: function(date){
 						return months[date.getMonth()];
 					},
 
@@ -28,18 +39,27 @@
 						return date.getDay();
 					},
 
-					buildMonthSelector:function(){
+					buildMonthSelector:function(date){
 						var monthSelector = document.createElement("tr");
 						var prevMonth = document.createElement("td");
+						prevMonth.setAttribute("class","prevMonth");
+						prevMonthDate = new Date(date);
+						prevMonthDate.setMonth(date.getMonth() - 1)
+						prevMonth.setAttribute("data-month", prevMonthDate.getMonth());
+						prevMonth.setAttribute("data-year", prevMonthDate.getFullYear());
 						prevMonth.setAttribute("class","prevMonth");
 						prevMonth.appendChild(document.createTextNode("«"));
 						
 						var currentMonth = document.createElement("td");
 						currentMonth.setAttribute("class","currentMonth");
 						currentMonth.setAttribute("colspan","5");
-						currentMonth.appendChild(document.createTextNode(this.getCurrentMonth()));
+						currentMonth.appendChild(document.createTextNode(this.getCurrentMonth(date)));
 
 						var nextMonth = document.createElement("td");
+						nextMonthDate = new Date(date);
+						nextMonthDate.setMonth(date.getMonth() + 1)
+						nextMonth.setAttribute("data-month", nextMonthDate.getMonth());
+						nextMonth.setAttribute("data-year", nextMonthDate.getFullYear());
 						nextMonth.setAttribute("class","nextMonth");
 						nextMonth.appendChild(document.createTextNode("»"));
 						
@@ -60,39 +80,46 @@
 						}
 						return th;
 					},
+
 					getStartDate:function(thisStartDate){
 						let startDay = this.getStartDay(thisStartDate);
 						thisStartDate.setDate(thisStartDate.getDate()-startDay);
 					},
-					assignDates:function(tbody){
-						let year = 2018;
-						let thisStartDate = new Date(year,5);
+
+					assignDates:function(tbody, date){
+						let year = date.getFullYear();
+						let month = date.getMonth();
+						let thisStartDate = new Date(year,month);
 						this.getStartDate(thisStartDate);
-						for(let i=0; i<5; i++){
+
+						for(let i=0; i<6; i++){
 							var tr = document.createElement("tr");
 							for(let i =0; i<7; i++){
-								var td_date = document.createElement("td");
-								td_date.setAttribute("class", "date");
+								var tdDate = document.createElement("td");
+								tdDate.setAttribute("class", "date");
 								var span = document.createElement("span");
-								span.appendChild(document.createTextNode("1"));
-								td_date.appendChild(span);
-								tr.appendChild(td_date);
+								span.appendChild(document.createTextNode(thisStartDate.getDate()));
+								tdDate.appendChild(span);
+								tr.appendChild(tdDate);
+								thisStartDate.setDate(thisStartDate.getDate()+1)
 							}
 							tbody.appendChild(tr);
 						}
 					},
 
-					buildBody: function(){
-						var table = document.createElement("table");
+					buildCalendar: function(table, date){
+						table.innerHtml = "";
 						var tbody = document.createElement("tbody");
-						tbody.appendChild(this.buildMonthSelector());
+						tbody.appendChild(this.buildMonthSelector(date));
 						tbody.appendChild(this.assignDays());
-						this.assignDates(tbody);
+						this.assignDates(tbody, date);
 						datepicker.appendChild(table);
 						table.appendChild(tbody);
 					}
 				}
+
 				dpMethods.init();
+				
 		})()
 	</script>
 </body>
