@@ -10,12 +10,46 @@
 	<script type="text/javascript">
 		(function(){
 				var datepicker = document.getElementById("datepicker");
-				var dpmethods = {
+				var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+				var dpMethods = {
 					init: function(){
-						console.log("build table here");
+						this.buildBody();
+					},
+					buildBody: function(){
+						var prevMonth = document.createElement("div"); 
+						var table = document.createElement("table");
+						var thead = document.createElement("thead");
+						var th = document.createElement("tr");
+						th.setAttribute("class","day");
+						//days
+						for(let i =0; i<7; i++){
+							tdDay = document.createElement("td")
+							tdDay.setAttribute("class", days[i])
+							tdDay.appendChild(document.createTextNode(days[i].slice(0,2)));
+							th.appendChild(tdDay);
+						}
+						thead.appendChild(th);
+						//dates
+						var tbody = document.createElement("tbody");
+						for(let i=0; i<5; i++){
+							var tr = document.createElement("tr");
+							for(let i =0; i<7; i++){
+								//start with last da
+								var td_date = document.createElement("td");
+								td_date.setAttribute("class", "date");
+								var span = document.createElement("span");
+								span.appendChild(document.createTextNode("1"));
+								td_date.appendChild(span);
+								tr.appendChild(td_date);
+							}
+							tbody.appendChild(tr);
+						}
+						datepicker.appendChild(table);
+						table.appendChild(thead);
+						table.appendChild(tbody);
 					}
 				}
-				dpmethods.init();
+				dpMethods.init();
 		})()
 	</script>
 </body>
