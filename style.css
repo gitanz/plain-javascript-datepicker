@@ -1,0 +1,36 @@
+body{
+    background:#ececec;
+}
+
+#datepicker{
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+#datepicker table{
+    background: #FFF;
+    border: 1px solid #ececec;
+    border-radius: 2px;
+}
+#datepicker table tr td{
+    width:30px;
+    height:30px;
+    cursor: pointer;
+    text-align: center
+}
+
+#datepicker table tr td:hover{
+    background:#ececec;
+    cursor: pointer;
+    border-radius:5px
+}
+#datepicker table tr:nth-child(2) td{
+    font-weight: bold
+}
+ul.nav{
+    margin-left:20px;
+}
+.navbar{
+    margin-bottom:0px;
+}
+.logo{
+    height: 48px;
+}
